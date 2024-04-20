@@ -51,9 +51,9 @@ jobs:
 
       - name: Build the project
         run: |
-          dotnet build OTAPI.Mods.sln
+          dotnet build OTAPI.Mods.slnf
           (cd OTAPI.Patcher/bin/Debug/net6.0 && exec dotnet run --project ../../../OTAPI.Patcher.csproj -patchTarget=${{ matrix.profile.patch_target }} -latest=n --framework net6.0)
-          dotnet build OTAPI.Server.Launcher.sln
+          dotnet build OTAPI.Server.Launcher.slnf
           (cd OTAPI.Server.Launcher/bin/Debug/net6.0 && exec dotnet OTAPI.Server.Launcher.dll -test-init)
 
       - uses: actions/upload-artifact@v3
