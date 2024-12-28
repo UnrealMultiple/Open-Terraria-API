@@ -30,6 +30,8 @@ using System.Runtime.InteropServices;
 
 //namespace OTAPI.Launcher;
 
+Console.WriteLine($"OTAPI.Server.Launcher Arch: {RuntimeInformation.ProcessArchitecture}");
+
 static Assembly GetTerrariaAssembly() => typeof(Terraria.Animation).Assembly;
 
 static Hook LazyHook(string type, string method, Delegate callback)
