@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 DeathCradle
+Copyright (C) 2020-2024 SignatureBeef
 
 This file is part of Open Terraria API v3 (OTAPI)
 
@@ -28,7 +28,6 @@ public static class Hooks
     public static void OnRunning()
     {
         Console.WriteLine("[RuntimeExample Server] Hello World! from a compiled DLL");
-        On.Terraria.Program.LaunchGame += Program_LaunchGame;
         On.Terraria.NetMessage.greetPlayer += NetMessage_greetPlayer;
     }
 
@@ -36,11 +35,5 @@ public static class Hooks
     {
         Console.WriteLine($"[RuntimeExample Server] Greet player: {plr}");
         orig(plr);
-    }
-
-    private static void Program_LaunchGame(On.Terraria.Program.orig_LaunchGame orig, string[] args, bool monoArgs)
-    {
-        Console.WriteLine("[RuntimeExample Server] LaunchGame was called!");
-        orig(args, monoArgs);
     }
 }
