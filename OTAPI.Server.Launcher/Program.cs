@@ -45,23 +45,33 @@ static Hook LazyHook(string type, string method, Delegate callback)
 
 static void Nop() { }
 
-static void Program_LaunchGame(On.Terraria.Program.orig_LaunchGame orig, string[] args, bool monoArgs)
+static void Program_LaunchGame(object sender, HookEvents.Terraria.Program.LaunchGameEventArgs e)
 {
 #if !TML
+    var SavePath = typeof(Terraria.Program).GetField("SavePath"); //1442+
+    if (SavePath is not null)
+    {
+        SavePath.SetValue(null, Terraria.Program.LaunchParameters.ContainsKey("-savedirectory") ? Terraria.Program.LaunchParameters["-savedirectory"] : Platform.Get<IPathService>().GetStoragePath("Terraria"));
+    }
+
+    // Steamworks.NET is not supported on ARM64, and will cause a crash
+    // TODO: create a shim generator in modfw to dynamically remove this for servers while keeping API compatibility
+    // Terraria.Main.SkipAssemblyLoad = true;
+    if (RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+    {
+        var SkipAssemblyLoad = typeof(Terraria.Main).GetField("SkipAssemblyLoad");
+        SkipAssemblyLoad.SetValue(null, true);
+        return;
+    }
+
     Console.WriteLine("Preloading assembly...");
 
     if (GetTerrariaAssembly().EntryPoint.DeclaringType.Name != "MonoLaunch")
     {
-        var SavePath = typeof(Terraria.Program).GetField("SavePath"); //1442+
-        if (SavePath is not null)
-        {
-            SavePath.SetValue(null, Terraria.Program.LaunchParameters.ContainsKey("-savedirectory") ? Terraria.Program.LaunchParameters["-savedirectory"] : Platform.Get<IPathService>().GetStoragePath("Terraria"));
-        }
         Terraria.Main.dedServ = true;
         Terraria.Program.ForceLoadAssembly(GetTerrariaAssembly(), initializeStaticMembers: true);
     }
 #endif
-    orig(args, monoArgs);
 }
 
 static void TShockHooks()
@@ -79,7 +89,7 @@ static void TShockHooks()
         calls[name] += 1;
         if ((DateTime.Now - lastUpdate).TotalSeconds >= 1)
         {
-            Console.WriteLine(String.Join($"{Environment.NewLine}\t- ", calls.Keys.OrderByDescending(x => calls[x]).Select(name => $"{name}:{calls[name]}")));
+            Console.WriteLine(String.Join($"{Environment.NewLine}", calls.Keys.OrderByDescending(x => calls[x]).Select(name => $"\t- {name}:{calls[name]}")));
             lastUpdate = DateTime.Now;
         }
 
@@ -98,8 +108,8 @@ static void TShockHooks()
     HookEvents.Terraria.Netplay.OnConnectionAccepted += Print;
     HookEvents.Terraria.NPC.SetDefaults += Print;
     HookEvents.Terraria.NPC.SetDefaultsFromNetId += Print;
-    HookEvents.Terraria.NPC.StrikeNPC += (npc, args) => args.ContinueExecution = false;
-    //HookEvents.Terraria.NPC.StrikeNPC += Print;
+    // HookEvents.Terraria.NPC.StrikeNPC += (npc, args) => args.ContinueExecution = false;
+    HookEvents.Terraria.NPC.StrikeNPC += Print;
     HookEvents.Terraria.NPC.Transform += Print;
     HookEvents.Terraria.NPC.AI += Print;
     HookEvents.Terraria.WorldGen.StartHardmode += Print;
@@ -171,10 +181,10 @@ static void Main_DedServ(On.Terraria.Main.orig_DedServ orig, Terraria.Main self)
         orig(self);
 }
 
+HookEvents.Terraria.Program.LaunchGame += Program_LaunchGame;
 if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
 {
     Terraria.Program.OnLaunched += Program_OnLaunched;
-    On.Terraria.Program.LaunchGame += Program_LaunchGame;
 }
 else
 {

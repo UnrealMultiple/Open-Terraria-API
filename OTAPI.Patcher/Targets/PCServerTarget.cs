@@ -125,35 +125,6 @@ public class PCServerTarget : IServerPatchTarget
                         // merge in HookResult, HookEvent etc
                         mm.ReadMod(typeof(HookEvent).Assembly.Location);
 
-                        ////mm.Module.GetType("Terraria.Main").FindMethod("Update").CreateHook(mm);
-                        //mm.Module.GetType("Terraria.Main").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Item").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.NetMessage").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Netplay").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.NPC").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.WorldGen").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Chat.ChatHelper").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.IO.WorldFile").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Net.NetManager").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Projectile").CreateHooks(mm);
-                        mm.Module.GetType("Terraria.Liquid").CreateHooks(mm);
-                        mm.Module.Write("test.dll");
-                        //HookEmitter.CreateHookDelegate(mm);
-                        //mm.Module.Write("test.dll");
-
-                        //// generate static hooks
-                        //mm.Module.GetType("Terraria.Main").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Item").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.NetMessage").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Netplay").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.NPC").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.WorldGen").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Chat.ChatHelper").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.IO.WorldFile").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Net.NetManager").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.Projectile").CreateHooks(mm);
-                        //mm.Module.GetType("Terraria.RemoteClient").CreateHooks(mm);
-
                         Console.WriteLine($"[OTAPI] Changing to AnyCPU (x64 preferred)");
                         mm.SetAnyCPU();
 
@@ -161,11 +132,6 @@ public class PCServerTarget : IServerPatchTarget
                         MergeReLogic(mm, embeddedResources);
                         this.AddPatchMetadata(mm, mm.Module.Name, vanillaDllPath);
                     }
-                    //else if(modType == ModType.PreWrite)
-                    //{
-                    //    HookEmitter.CreateHookDelegate(mm);
-                    //    mm.Module.Write("test.dll");
-                    //}
                 }
                 return EApplyResult.Continue;
             });
@@ -248,6 +214,8 @@ public class PCServerTarget : IServerPatchTarget
                             mm.Module.GetType("Terraria.Net.NetManager").CreateHooks(mm);
                             mm.Module.GetType("Terraria.Projectile").CreateHooks(mm);
                             mm.Module.GetType("Terraria.RemoteClient").CreateHooks(mm);
+                            mm.Module.GetType("Terraria.Liquid").CreateHooks(mm);
+                            mm.Module.GetType("Terraria.Program").CreateHooks(mm);
                             Console.WriteLine("Done");
                         }
                         else if (modType == ModType.Write)
