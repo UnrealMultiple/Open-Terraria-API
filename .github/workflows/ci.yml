@@ -77,16 +77,16 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.profile.name }} NuGet Package
+          name: ${{ matrix.os.name }} ${{ matrix.profile.name }} NuGet Package
           path: OTAPI.Patcher/bin/Debug/net9.0/${{ matrix.profile.package_path }}
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.profile.name }} Binaries
+          name: $${{ matrix.os.name }} {{ matrix.profile.name }} Binaries
           path: |
             OTAPI.Patcher/bin/Debug/net9.0/artifact-*/*
 
       - uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.profile.name }} Wiki MD files
+          name: ${{ matrix.os.name }} ${{ matrix.profile.name }} Wiki MD files
           path: OTAPI.Patcher/bin/Debug/net9.0/*.mfw.md
