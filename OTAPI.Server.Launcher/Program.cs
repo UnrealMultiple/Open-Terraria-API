@@ -157,8 +157,6 @@ static void Program_OnLaunched(object sender, EventArgs e)
         Console.WriteLine($"Hooks.Item.MechSpawn x={args.X}, y={args.Y}, type={args.Type}, num={args.Num}, num2={args.Num2}, num3={args.Num3}");
     };
 
-    On.Terraria.Main.DedServ += Main_DedServ;
-
     On.Terraria.RemoteClient.Update += (orig, rc) =>
     {
         //Console.WriteLine($"RemoteClient.Update: HOOK ID#{rc.Id} IsActive:{rc.IsActive},PT:{rc.PendingTermination}");
@@ -178,14 +176,15 @@ static void Main_ctor(On.Terraria.Main.orig_ctor orig, Terraria.Main self)
     Console.WriteLine("Main invoked");
 }
 
-static void Main_DedServ(On.Terraria.Main.orig_DedServ orig, Terraria.Main self)
+static void Main_DedServ(object sender, HookEvents.Terraria.Main.DedServEventArgs e)
 {
     Console.WriteLine($"Server init process successful");
 
-    if (!Environment.GetCommandLineArgs().Any(x => x.ToLower() == "-test-init"))
-        orig(self);
+    if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "-test-init"))
+        e.ContinueExecution = false;
 }
 
+HookEvents.Terraria.Main.DedServ += Main_DedServ;
 HookEvents.Terraria.Program.LaunchGame += Program_LaunchGame;
 if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
 {
