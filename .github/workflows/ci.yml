@@ -82,7 +82,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: $${{ matrix.os.name }} {{ matrix.profile.name }} Binaries
+          name: ${{ matrix.os.name }} ${{ matrix.profile.name }} Binaries
           path: |
             OTAPI.Patcher/bin/Debug/net9.0/artifact-*/*
 
