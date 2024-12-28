@@ -5,8 +5,7 @@
 		<TargetFramework>net9.0</TargetFramework>
 		<Version>3.1.21</Version>
 		<PreserveCompilationContext>true</PreserveCompilationContext>
-		<PlatformTarget>x64</PlatformTarget>
-		<RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
+		<RuntimeIdentifiers>win;osx;linux;</RuntimeIdentifiers>
 		<Nullable>enable</Nullable>
 		<PackageReleaseNotes>Initial 1.4.4.9 support</PackageReleaseNotes>
 	</PropertyGroup>

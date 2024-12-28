@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 //namespace OTAPI.Launcher;
 
@@ -59,7 +60,6 @@ static void Program_LaunchGame(On.Terraria.Program.orig_LaunchGame orig, string[
         Terraria.Main.dedServ = true;
         Terraria.Program.ForceLoadAssembly(GetTerrariaAssembly(), initializeStaticMembers: true);
     }
-    TShockHooks();
 #endif
     orig(args, monoArgs);
 }
@@ -171,8 +171,15 @@ static void Main_DedServ(On.Terraria.Main.orig_DedServ orig, Terraria.Main self)
         orig(self);
 }
 
-Terraria.Program.OnLaunched += Program_OnLaunched;
-On.Terraria.Program.LaunchGame += Program_LaunchGame;
+if (RuntimeInformation.ProcessArchitecture != Architecture.Arm64)
+{
+    Terraria.Program.OnLaunched += Program_OnLaunched;
+    On.Terraria.Program.LaunchGame += Program_LaunchGame;
+}
+else
+{
+    TShockHooks();
+}
 
 #if TML
 On.MonoLaunch.GetBaseDirectory += (orig) =>

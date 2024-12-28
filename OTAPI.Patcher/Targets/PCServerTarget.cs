@@ -31,7 +31,7 @@ public class PCServerTarget : IServerPatchTarget
     public virtual string ArtifactName { get; } = "artifact-pc";
 
     public virtual bool PublicEverything => true;
-    public virtual bool GenerateSymbols => true;
+    public virtual bool GenerateSymbols => false;
 
     public virtual string GetEmbeddedResourcesDirectory(string fileinput)
     {
@@ -308,6 +308,9 @@ public class PCServerTarget : IServerPatchTarget
 
         if (cli != "n")
         {
+            if (Console.IsInputRedirected)
+                return FileResolver.AquireLatestBinaryUrl();
+
             int attempts = 5;
             do
             {
