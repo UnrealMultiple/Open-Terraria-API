@@ -101,7 +101,9 @@ static void TShockHooks()
     HookEvents.Terraria.Main.checkXMas += Print;
     HookEvents.Terraria.Main.checkHalloween += Print;
     HookEvents.Terraria.Main.startDedInput += Print;
+#if !TML
     HookEvents.Terraria.Item.SetDefaults_Int32_Boolean_ItemVariant += Print;
+#endif
     HookEvents.Terraria.Item.netDefaults += Print;
     HookEvents.Terraria.NetMessage.greetPlayer += Print;
     HookEvents.Terraria.Netplay.StartServer += Print;
