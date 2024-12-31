@@ -5,6 +5,8 @@
 		<Nullable>enable</Nullable>
 		<DebugType>embedded</DebugType>
 		<RunPostBuildEvent>Always</RunPostBuildEvent>
+		<UseCurrentRuntimeIdentifier Condition="'$(UseCurrentRuntimeIdentifier)' == ''">true</UseCurrentRuntimeIdentifier>
+		<SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
 	</PropertyGroup>
 	<ItemGroup>
 		<AvaloniaXaml Remove="Properties\**" />
@@ -86,7 +88,7 @@
 			<DependentUpon>MessageBoxWindow.axaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="AfterBuild;PostBuildEvent">
+	<Target Name="PostBuild" AfterTargets="AfterBuild;PreBuildEvent">
 		<Message Text="Copying OTAPI patch files" Importance="high" />
 		<MakeDir Directories="$(TargetDir)modifications/" />
 		<RemoveDir Directories="$(TargetDir)modifications/" />
