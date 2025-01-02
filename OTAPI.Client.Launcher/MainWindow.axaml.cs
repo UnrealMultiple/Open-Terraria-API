@@ -89,6 +89,7 @@ public partial class MainWindow : Window
     private void OnConsoleLineReceived(string line)
     {
         Context.Console.Insert(0, $"[{DateTime.Now:yyyyMMdd HH:mm:ss}] {line}");
+        System.Diagnostics.Debug.WriteLine($"[OTAPI.Launcher] {line}");
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
